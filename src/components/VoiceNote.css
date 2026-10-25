@@ -1,0 +1,162 @@
+.voice-note {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px 10px 10px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--hairline);
+}
+
+.voice-note__btn {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  display: grid;
+  place-items: center;
+  background: var(--active-accent);
+  color: var(--active-accent-ink);
+  transition: transform 0.18s ease, filter 0.2s ease, background 0.55s ease, color 0.55s ease;
+}
+.voice-note__btn:hover {
+  transform: scale(1.04);
+  filter: brightness(1.08);
+}
+.voice-note__btn:active {
+  transform: scale(0.96);
+}
+
+.voice-note__spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--active-accent-ink) 25%, transparent);
+  border-top-color: var(--active-accent-ink);
+  animation: vn-spin 0.7s linear infinite;
+}
+@keyframes vn-spin {
+  to { transform: rotate(360deg); }
+}
+
+.voice-note__waveform {
+  position: relative;
+  flex: 1 1 auto;
+  height: 26px;
+  min-width: 110px;
+  --progress: 0%;
+}
+
+.voice-note__bars {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* the fill layer reveals left-to-right as playback progresses */
+.voice-note__bars--fill {
+  clip-path: inset(0 calc(100% - var(--progress, 0%)) 0 0);
+  transition: clip-path 0.12s linear;
+}
+
+.voice-note__bar {
+  flex: 1 1 auto;
+  height: 32%;
+  border-radius: 3px;
+}
+/* a gentle static waveform silhouette (identical on both layers, so they align) */
+.voice-note__bar:nth-child(2n) { height: 54%; }
+.voice-note__bar:nth-child(3n) { height: 78%; }
+.voice-note__bar:nth-child(5n) { height: 44%; }
+.voice-note__bar:nth-child(7n) { height: 94%; }
+
+.voice-note__bars--track .voice-note__bar {
+  background: rgba(255, 255, 255, 0.15);
+}
+/* played portion fills with the planet's exhibit-room color */
+.voice-note__bars--fill .voice-note__bar {
+  background: var(--active-accent);
+  transition: background 0.55s ease;
+}
+
+.voice-note__meta {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.voice-note__download {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--ink-dim);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--hairline);
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+  transition: color 0.2s, background 0.2s, transform 0.2s;
+}
+.voice-note__download:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(1px);
+}
+.voice-note__download:disabled {
+  opacity: 0.6;
+  cursor: default;
+  transform: none;
+}
+.voice-note__dl-spin {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-top-color: currentColor;
+  animation: vn-spin 0.7s linear infinite;
+}
+
+.voice-note__badge {
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 4px 9px;
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+}
+.voice-note__badge.is-real {
+  color: #9cf7c4;
+  background: rgba(88, 214, 141, 0.12);
+  border: 1px solid rgba(88, 214, 141, 0.3);
+}
+.voice-note__badge.is-synthetic {
+  color: var(--ink-dim);
+  background: rgba(163, 170, 196, 0.08);
+  border: 1px solid rgba(163, 170, 196, 0.2);
+}
+
+/* phones: let the badge + download wrap onto their own row so both always show
+   (a real recording gets a download link; a synthesized one is labelled as such) */
+@media (max-width: 520px) {
+  .voice-note {
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+  .voice-note__waveform {
+    min-width: 60px;
+  }
+  .voice-note__meta {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 2px;
+  }
+}

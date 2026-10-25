@@ -1,0 +1,139 @@
+/* Share button + popover. Mirrors Apogee's share design, using Planetary Voices'
+   own tokens. Fixed top-right so it is identical on mobile and laptop. */
+.share {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 30;
+}
+
+.share__btn {
+  pointer-events: auto;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8px 15px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.share__btn:hover,
+.share__btn:focus-visible {
+  color: var(--active-accent);
+  border-color: var(--active-accent);
+}
+.share__btn--on {
+  color: var(--active-accent);
+  border-color: var(--active-accent);
+  background: var(--active-glow);
+}
+
+.share__pop {
+  position: absolute;
+  top: 46px;
+  right: 0;
+  width: 238px;
+  transform-origin: top right;
+  background: var(--surface-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: 15px 15px 13px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+}
+
+.share__title {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-bottom: 11px;
+}
+
+.share__row {
+  display: flex;
+  gap: 9px;
+  margin-bottom: 11px;
+}
+.share__ic {
+  flex: 1;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  color: var(--ink-dim);
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+.share__ic svg {
+  width: 19px;
+  height: 19px;
+  fill: currentColor;
+  display: block;
+}
+.share__ic:hover {
+  border-color: var(--active-accent);
+  background: rgba(255, 255, 255, 0.08);
+}
+.share__ic[data-net='x']:hover {
+  color: #fff;
+}
+.share__ic[data-net='wa']:hover {
+  color: #25d366;
+}
+.share__ic[data-net='fb']:hover {
+  color: #1877f2;
+}
+
+.share__copy {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  background: var(--active-glow);
+  border: 1px solid var(--active-line);
+  border-radius: var(--radius);
+  padding: 9px;
+  cursor: pointer;
+  transition: color 0.18s ease, background 0.18s ease;
+}
+.share__copy svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.share__copy:hover,
+.share__copy--copied {
+  color: var(--active-accent);
+  background: color-mix(in srgb, var(--active-accent) 22%, transparent);
+}
+
+/* phones: nudge in a little and keep the popover on-screen */
+@media (max-width: 640px) {
+  .share {
+    top: 12px;
+    right: 10px;
+  }
+  .share__pop {
+    width: min(238px, calc(100vw - 20px));
+  }
+}

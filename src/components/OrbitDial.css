@@ -1,0 +1,174 @@
+/* Phone-only orbit dial. Shown exactly when the 3D scene switches to its vertical
+   hero layout: isVertical = h > w * 1.1, i.e. aspect-ratio <= 10/11 (portrait). */
+.orbit-dial {
+  display: none;
+}
+
+@media (max-aspect-ratio: 10 / 11) {
+  .orbit-dial {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 50px;
+    z-index: 8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    --wheel: min(300px, 82vw);
+    --ring: calc(var(--wheel) / 2 - 30px);
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+}
+
+/* when the info panel is open, slide the dial away */
+.orbit-dial--hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(24px);
+}
+
+.orbit-dial__pointer {
+  width: 0;
+  height: 0;
+  margin-bottom: 2px;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 10px solid var(--dial-accent, var(--accent));
+  transition: border-top-color 0.35s ease;
+}
+
+.orbit-dial__wheel {
+  position: relative;
+  width: var(--wheel);
+  height: var(--wheel);
+  transform: rotate(var(--rot, 0deg));
+  will-change: transform;
+  touch-action: none;
+  cursor: grab;
+  -webkit-tap-highlight-color: transparent;
+}
+.orbit-dial__wheel:active {
+  cursor: grabbing;
+}
+
+/* faint guide ring the planets ride along */
+.orbit-dial__wheel::before {
+  content: '';
+  position: absolute;
+  inset: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.orbit-dial__slot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  margin: -30px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transform: rotate(var(--a)) translateY(calc(-1 * var(--ring)));
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+.orbit-dial__slot:focus-visible .orbit-dial__marker {
+  box-shadow: 0 0 0 2px #fff, 0 0 14px var(--glow); /* fallback (no color-mix) */
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 14px color-mix(in srgb, var(--glow) 80%, transparent);
+}
+
+.orbit-dial__marker {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  /* cancel both the wheel rotation and this slot's angle so the disc stays upright */
+  transform: rotate(calc(-1 * var(--a) - var(--rot, 0deg)));
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14), 0 0 8px var(--glow); /* fallback */
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.14),
+    0 0 8px color-mix(in srgb, var(--glow) 45%, transparent);
+  transition: width 0.22s ease, height 0.22s ease, box-shadow 0.22s ease;
+  -webkit-user-drag: none;
+}
+
+/* the planet currently under the top pointer */
+.orbit-dial__slot.is-top .orbit-dial__marker {
+  width: 58px;
+  height: 58px;
+  /* crisp selection ring + one restrained glow (no triple-stacked neon) */
+  box-shadow: 0 0 0 2px #fff, 0 0 16px var(--glow); /* fallback (no color-mix) */
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 16px color-mix(in srgb, var(--glow) 60%, transparent);
+}
+
+/* glowing orbit hub at the centre */
+.orbit-dial__hub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+}
+.orbit-dial__hub-core {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  /* flat, restrained hub tinted to the focused planet — one soft glow, no neon stack */
+  background: radial-gradient(circle at 40% 38%, #fff, var(--dial-accent, var(--accent)) 60%, transparent);
+  box-shadow: 0 0 14px 2px color-mix(in srgb, var(--dial-accent, var(--accent)) 45%, transparent);
+  transition: background 0.35s ease, box-shadow 0.35s ease;
+  animation: orbit-hub-pulse 4s ease-in-out infinite;
+}
+.orbit-dial__hub-ring {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--dial-accent, var(--accent)) 26%, transparent);
+  transition: border-color 0.35s ease;
+}
+.orbit-dial__hub-ring--wide {
+  width: 104px;
+  height: 104px;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+@keyframes orbit-hub-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.92; }
+  50% { transform: scale(1.12); opacity: 1; }
+}
+
+.orbit-dial__name {
+  margin-top: 14px;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--dial-accent, var(--ink));
+  transition: color 0.35s ease;
+}
+.orbit-dial__hint {
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}

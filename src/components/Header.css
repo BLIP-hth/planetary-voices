@@ -1,0 +1,111 @@
+/* Scene-first: the header is now a small, confident corner wordmark (top-left),
+   NOT a big centered banner — the 3D solar system is the hero. */
+.site-header {
+  position: relative;
+  z-index: 5;
+  text-align: left;
+  padding: 20px 24px 0;
+  pointer-events: none;
+}
+
+.site-header__kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--active-accent-text);
+  transition: color 0.55s ease;
+  margin-bottom: 5px;
+  /* re-enable interaction (header is pointer-events:none) so the secret
+     5-tap trigger works; keep it feeling like plain text */
+  pointer-events: auto;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  display: inline-block;
+}
+
+.site-header h1 {
+  font-size: clamp(18px, 2vw, 25px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.site-header__sub {
+  margin: 6px 0 0;
+  max-width: 320px;
+  color: var(--ink-dim);
+  font-size: 13px;
+  line-height: 1.5;
+  /* desktop: the bottom "tap a planet to listen" hint already covers this,
+     so keep the corner mark clean and let the scene breathe */
+  display: none;
+}
+
+.site-header__sub-narrow {
+  display: none;
+}
+
+/* phones (portrait): the planet rises behind the header, so show the short
+   instruction here (the bottom hint is hidden on mobile) with a soft scrim */
+@media (max-aspect-ratio: 10 / 11) {
+  .site-header {
+    text-align: center;
+    padding: 20px 20px 30px;
+    background: linear-gradient(
+      180deg,
+      rgba(4, 6, 14, 0.9) 0%,
+      rgba(4, 6, 14, 0.62) 55%,
+      rgba(4, 6, 14, 0) 100%
+    );
+  }
+  .site-header h1 {
+    font-size: clamp(24px, 7vw, 34px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .site-header__sub {
+    display: block;
+    margin-inline: auto;
+  }
+  .site-header__sub-wide {
+    display: none;
+  }
+  .site-header__sub-narrow {
+    display: inline;
+  }
+  .site-header h1,
+  .site-header__kicker,
+  .site-header__sub {
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.55);
+  }
+}
+
+/* phones (portrait): keep the header compact so the hero planet clears it */
+@media (max-width: 640px) {
+  .site-header {
+    padding-top: 16px;
+  }
+  .site-header__kicker {
+    margin-bottom: 5px;
+  }
+  .site-header__sub {
+    margin-top: 7px;
+    font-size: 13px;
+  }
+}
+
+/* short screens (landscape phones): the corner mark stays tiny, drop the sub */
+@media (max-height: 520px) {
+  .site-header {
+    padding-top: 12px;
+  }
+  .site-header h1 {
+    font-size: 18px;
+  }
+  .site-header__sub {
+    display: none;
+  }
+}

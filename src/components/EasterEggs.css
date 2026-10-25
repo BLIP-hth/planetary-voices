@@ -1,0 +1,28 @@
+.egg-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 74px;
+  transform: translateX(-50%);
+  z-index: 50;
+  padding: 12px 22px;
+  border-radius: var(--radius-lg);
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  font-weight: 500;
+  color: #f2f5ff;
+  white-space: nowrap;
+  background: var(--surface-raised);
+  border: 1px solid var(--hairline);
+  box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.7);
+  margin-left: 0;
+  left: 50%;
+}
+
+@media (max-width: 560px) {
+  .egg-toast {
+    font-size: 13px;
+    white-space: normal;
+    max-width: 88vw;
+    text-align: center;
+  }
+}

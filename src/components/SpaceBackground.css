@@ -1,0 +1,117 @@
+.space-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  /* near-black space — no blue cast, reads like real sky */
+  background: radial-gradient(ellipse at 50% -10%, #080a12 0%, var(--bg-void) 55%, #010102 100%);
+}
+
+/* Real starfield (replaces the blue/purple/orange nebula gradients).
+   Far layer: a dense, dim, tiled star tile. Near layer: sparse bright
+   foreground stars with a slow parallax drift. */
+.space-bg__stars {
+  position: absolute;
+  inset: -10%;
+}
+
+.space-bg__stars--far {
+  opacity: 0.5;
+  background-repeat: repeat;
+  background-size: 160px 160px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' fill='%23ffffff'%3E%3Ccircle cx='12' cy='34' r='.8' opacity='.7'/%3E%3Ccircle cx='48' cy='12' r='.6' opacity='.5'/%3E%3Ccircle cx='88' cy='40' r='1' opacity='.9'/%3E%3Ccircle cx='140' cy='22' r='.7' opacity='.6' fill='%23bcd0ff'/%3E%3Ccircle cx='26' cy='72' r='.7' opacity='.6'/%3E%3Ccircle cx='66' cy='90' r='.5' opacity='.4'/%3E%3Ccircle cx='110' cy='76' r='.9' opacity='.8'/%3E%3Ccircle cx='150' cy='100' r='.6' opacity='.5'/%3E%3Ccircle cx='18' cy='120' r='.8' opacity='.7'/%3E%3Ccircle cx='54' cy='140' r='.6' opacity='.5'/%3E%3Ccircle cx='92' cy='124' r='.7' opacity='.6' fill='%23ffd9b0'/%3E%3Ccircle cx='128' cy='148' r='.9' opacity='.8'/%3E%3Ccircle cx='150' cy='60' r='.5' opacity='.4'/%3E%3Ccircle cx='72' cy='54' r='.6' opacity='.5'/%3E%3Ccircle cx='36' cy='100' r='.5' opacity='.45'/%3E%3Ccircle cx='100' cy='10' r='.7' opacity='.6'/%3E%3Ccircle cx='8' cy='88' r='.6' opacity='.5'/%3E%3Ccircle cx='120' cy='50' r='.5' opacity='.4'/%3E%3Ccircle cx='44' cy='64' r='.7' opacity='.6'/%3E%3Ccircle cx='84' cy='150' r='.6' opacity='.5'/%3E%3Ccircle cx='134' cy='110' r='.5' opacity='.4'/%3E%3Ccircle cx='60' cy='26' r='.6' opacity='.5'/%3E%3C/svg%3E");
+  animation: star-drift 140s linear infinite;
+}
+
+.space-bg__stars--near {
+  background-repeat: no-repeat;
+  background-image:
+    radial-gradient(1.4px 1.4px at 8% 18%, #ffffff 45%, transparent 55%),
+    radial-gradient(1.6px 1.6px at 22% 62%, #ffffff 45%, transparent 55%),
+    radial-gradient(1.3px 1.3px at 35% 30%, #bcd0ff 45%, transparent 55%),
+    radial-gradient(1.5px 1.5px at 47% 80%, #ffffff 45%, transparent 55%),
+    radial-gradient(1.4px 1.4px at 58% 15%, #ffffff 45%, transparent 55%),
+    radial-gradient(1.7px 1.7px at 66% 48%, #ffffff 45%, transparent 55%),
+    radial-gradient(1.3px 1.3px at 74% 88%, #ffffff 45%, transparent 55%),
+    radial-gradient(1.5px 1.5px at 81% 34%, #ffd9b0 45%, transparent 55%),
+    radial-gradient(1.4px 1.4px at 90% 70%, #ffffff 45%, transparent 55%),
+    radial-gradient(1.6px 1.6px at 94% 12%, #ffffff 45%, transparent 55%),
+    radial-gradient(1.3px 1.3px at 15% 90%, #ffffff 45%, transparent 55%),
+    radial-gradient(1.5px 1.5px at 40% 55%, #ffffff 45%, transparent 55%);
+  animation: star-drift 90s linear infinite reverse;
+}
+
+@keyframes star-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, -80px, 0); }
+}
+
+.space-bg__shooting {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.shoot {
+  position: absolute;
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0));
+  border-radius: 999px;
+  opacity: 0;
+  transform: rotate(18deg);
+  filter: drop-shadow(0 0 4px rgba(210, 224, 255, 0.5));
+}
+
+.shoot--1 { top: 14%; left: -12%; animation: shoot-move 9s ease-in 2s infinite; }
+.shoot--2 { top: 42%; left: -12%; animation: shoot-move 11s ease-in 6.5s infinite; }
+.shoot--3 { top: 68%; left: -12%; animation: shoot-move 13s ease-in 11s infinite; }
+
+@keyframes shoot-move {
+  0% { opacity: 0; transform: translate(0, 0) rotate(18deg); }
+  3% { opacity: 0.8; }
+  16% { opacity: 0; }
+  100% { opacity: 0; transform: translate(130vw, 42vh) rotate(18deg); }
+}
+
+.space-bg__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(2, 2, 6, 0.65) 100%);
+}
+
+/* The exhibit-room flood: a soft dome of the active planet's color glowing down
+   from the top, plus a faint floor bounce. Because --active-accent is registered
+   via @property on .app, this whole layer cross-fades when you change planets. */
+.space-bg__tint {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 82% at 50% -12%,
+      color-mix(in srgb, var(--active-accent) 24%, transparent) 0%,
+      color-mix(in srgb, var(--active-accent) 8%, transparent) 34%,
+      transparent 66%),
+    radial-gradient(90% 60% at 50% 118%,
+      color-mix(in srgb, var(--active-accent) 10%, transparent) 0%,
+      transparent 60%);
+  transition: background 0.55s ease;
+  mix-blend-mode: screen;
+}
+
+.space-bg__grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .space-bg__stars { animation: none; }
+}
+
+/* while reading a planet (panel open), the background is hidden behind the opaque
+   panel — pause the drift/shoot animations so scrolling stays smooth */
+.app--reading .space-bg__stars,
+.app--reading .shoot {
+  animation-play-state: paused;
+}
